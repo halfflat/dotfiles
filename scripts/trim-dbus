@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# run program and args with only first component of DBUS_SESSION_BUS_ADDRESS
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    echo "Missing DBUS_SESSION_BUS_ADDRESS environment variable" >&2
+    exit 1
+fi
+
+typeset -x DBUS_SESSION_BUS_ADDRESS="`sed 's/;.*//' <<< "${DBUS_SESSION_BUS_ADDRESS}"`"
+exec "$@"

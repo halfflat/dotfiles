@@ -1,0 +1,15 @@
+# multimonitor
+# xrandr --output DVI-D-1 --left-of DVI-D-0 --rotate left
+
+# default background
+# setroot --span --greyscale --brighten -0.5 --zoom $HOME/media/background-images/paper_0016_01.jpg
+
+# screen lock
+xss-lock -- i3lock -n -e -c 000000 2>/dev/null &
+xset s 3600
+
+# keyboard and mouse
+xset r rate 250 40
+
+# X applications
+trim-dbus taffybar &

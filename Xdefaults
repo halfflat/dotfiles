@@ -1,0 +1,13 @@
+Rxvt.background: black
+Rxvt.foreground: white
+Rxvt.cursorColor: orange
+Rxvt.jumpScroll: True
+Rxvt.font: fixed
+Rxvt.italicFont: -misc-fixed-medium-o-semicondensed--13-120-75-75-c-60-iso10646-1
+Rxvt.scrollBar: False
+Rxvt.saveLines: 20000
+Rxvt.pastableTabs: True
+Rxvt.inputMethod: ibus
+Rxvt.preeditType: OverTheSpot
+Rxvt.perl-ext-common: default,readline
+

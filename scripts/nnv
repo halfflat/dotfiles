@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+XTERM=urxvt
+
+# start a new terminal window and invoke nvim with given args.
+(setsid $XTERM -e nvim -c ':map <c-z> <nop>' "$@" &)

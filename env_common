@@ -1,0 +1,35 @@
+typeset -x LC_COLLATE=C
+
+typeset -x PATH="$HOME/bin:$HOME/pkg/bin:$HOME/.gem/ruby/2.1.0/bin:$PATH"
+typeset -x MANPATH="$HOME/man:$HOME/pkg/man:$HOME/pkg/share/man:$MANPATH"
+
+typeset -x TEXINPUTS=".:$HOME/share/texmf//:$HOME/pkg/share/texmf//:"
+typeset -x BSTINPUTS"=.:$HOME/share/texmf//:$HOME/pkg/share/texmf//:"
+
+typeset -x PYTHONSTARTUP="$HOME/.pythonrc"
+typeset -x PYTHONPATH="$HOME/pkg/lib/python2.7/site-packages"
+
+typeset -x HISTTIMEFORMAT='%F %H:%M:%S '
+typeset -x VISUAL=vim
+
+umask 007
+
+pathuniq () {
+    local IFS=:
+    if [ -n "$ZSH_VERSION" ]; then
+	local -U q=(${=1})
+    else
+	local -a p=($1) q
+	local -A s
+	for k in "${p[@]}"; do
+	    if [ ! ${s[$k]+_} ]; then q+=("$k"); fi
+	    s[$k]=1
+	done
+    fi
+    echo "${q[*]}"
+}
+
+typeset -x PATH=$(path-uniq "$PATH")
+typeset -x MANPATH=$(path-uniq "$MANPATH")
+typeset -x PYTHONPATH=$(path-uniq "$PYTHONPATH")
+
