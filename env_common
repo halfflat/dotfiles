@@ -29,7 +29,7 @@ pathuniq () {
     echo "${q[*]}"
 }
 
-typeset -x PATH=$(path-uniq "$PATH")
-typeset -x MANPATH=$(path-uniq "$MANPATH")
-typeset -x PYTHONPATH=$(path-uniq "$PYTHONPATH")
+typeset -x PATH=$(pathuniq "$PATH")
+typeset -x MANPATH=$(pathuniq "$MANPATH")
+typeset -x PYTHONPATH=$(pathuniq "$PYTHONPATH")
 
