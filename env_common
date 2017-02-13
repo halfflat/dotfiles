@@ -17,14 +17,17 @@ umask 007
 pathuniq () {
     local IFS=:
     if [ -n "$ZSH_VERSION" ]; then
-	local -U q=(${=1})
-    else
+	local -aU q
+      q=(${=1})
+    elif [ -n "$BASH_VERSION" ] && [ "${BASH_VERSION%%.*}" -gt 3 ]; then
 	local -a p=($1) q
 	local -A s
 	for k in "${p[@]}"; do
 	    if [ ! ${s[$k]+_} ]; then q+=("$k"); fi
 	    s[$k]=1
 	done
+    else
+      local -a q=($1)
     fi
     echo "${q[*]}"
 }
