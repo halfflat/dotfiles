@@ -1,23 +1,29 @@
 reset_prompt () {
     if [ "$(tput colors)" -gt 2 ]; then
-	local yellow=$(tput setaf 3)
-	local red=$(tput setaf 1)
-	local white=$(tput setaf 7)
-	local reset=$(tput sgr0)
+        local yellow=$(tput setaf 3)
+        local red=$(tput setaf 1)
+        local white=$(tput setaf 7)
+        local reset=$(tput sgr0)
 
-	local hcol="$yellow"
-	local ucol="$white"
-	if [[ ${EUID} == 0 ]]; then
-	    local ucol="$red"
-	fi
+        local hcol="$yellow"
+        local ucol="$white"
+        if [[ ${EUID} == 0 ]]; then
+            local ucol="$red"
+        fi
 
-	PS1="\\[$hcol\\]\\h:\\[$ucol\\]\\w/\\$\\[$reset\\] "
+        PS1="\\[$hcol\\]\\h:\\[$ucol\\]\\w/\\$\\[$reset\\] "
     else
-	PS1='\h:\w/\$ '
+        PS1='\h:\w/\$ '
     fi
 }
 
-reset_prompt
+# rxvt-unicode-256color not always present in terminfo:
+# try removing '-unicode' from name if no entry.
+if [ `(tput 2>/dev/null; echo $?)` -eq 3 ]; then
+    typeset -x TERM="${TERM/-unicode/}";
+fi
+
+[[ $- =~ "i" ]] && reset_prompt
 
 HISTFILE="$HOME/.bash_history"
 HISTSIZE=2000
