@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Find pointer.
+
+devs=$(xinput | sed -e '/Virtual/d; /pointer/!d; s/.*id=\([0-9]*\).*/\1/')
+
+if [ -z "$devs" ]; then
+    echo "failed to find non virtual pointer device." >&2
+    exit 1
+fi
+
+# Find property.
+
+for dev in $devs; do
+    prop=$(xinput list-props $dev | sed -e '/Middle.*Emulation/!d; s/.*(\([0-9]*\)).*/\1/; q')
+
+    if [ -z "$prop" ]; then
+	echo "failed to find middle button emulation property." >&2
+	exit 1
+    else
+	xinput set-prop $dev $prop 1
+    fi
+done
+
+
+
