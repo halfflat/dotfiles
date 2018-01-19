@@ -1,5 +1,5 @@
 reset_prompt () {
-    if [ "$(tput colors)" -gt 2 ]; then
+    if ncol="$(tput colors 2>/dev/null)" && [ "$ncol" -gt 2 ]; then
         local yellow=$(tput setaf 3)
         local red=$(tput setaf 1)
         local white=$(tput setaf 7)

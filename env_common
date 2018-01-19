@@ -10,7 +10,12 @@ typeset -x PYTHONSTARTUP="$HOME/.pythonrc"
 typeset -x PYTHONPATH="$HOME/pkg/lib/python2.7/site-packages"
 
 typeset -x HISTTIMEFORMAT='%F %H:%M:%S '
-typeset -x VISUAL=vim
+
+if type nvim >&/dev/null; then
+    typeset -x VISUAL=nvim
+elif type vim >&/dev/null; then
+    typeset -x VISUAL=vim
+fi
 
 umask 007
 
@@ -18,7 +23,7 @@ pathuniq () {
     local IFS=:
     if [ -n "$ZSH_VERSION" ]; then
 	local -aU q
-      q=(${=1})
+        q=(${=1})
     elif [ -n "$BASH_VERSION" ] && [ "${BASH_VERSION%%.*}" -gt 3 ]; then
 	local -a p=($1) q
 	local -A s
@@ -33,6 +38,6 @@ pathuniq () {
 }
 
 typeset -x PATH=$(pathuniq "$PATH")
-typeset -x MANPATH=$(pathuniq "$MANPATH")
+typeset -x MANPATH=$(pathuniq "$MANPATH"):
 typeset -x PYTHONPATH=$(pathuniq "$PYTHONPATH")
 
