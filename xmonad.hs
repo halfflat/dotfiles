@@ -77,11 +77,11 @@ wmKeys config = mkKeymap config $
     [("M-"++show n, windows (W.view w)) | (n,w) <- zip [1..9] (workspaces config)]
     ++
     [("M-C-"++show n, windows (W.shift w)) | (n,w) <- zip [1..9] (workspaces config)]
-    
+
 wmLayout = columns ||| Mirror columns ||| simpleTabbed
     where columns = multiCol [1,1] 3 (3/100) (1/3)
 
-main = xmonad $ ewmh $ withNavigation2DConfig nav2dconfig $ defaultConfig
+main = xmonad $ docks $ ewmh $ withNavigation2DConfig nav2dconfig $ defaultConfig
    {
       manageHook = manageDocks <+> manageHook defaultConfig,
       layoutHook = (avoidStruts $ wmLayout) ||| noBorders Full,
