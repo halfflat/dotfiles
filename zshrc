@@ -1,4 +1,4 @@
-PROMPT='%F{yellow}%m:%f%(!.%F{red}.%F{white})%1d%(1~./.)%# '
+PROMPT='%F{yellow}%m:%f%(!.%F{red}.%F{252})%1d%(1~./.)%#%f '
 
 HISTFILE=~/.histfile
 HISTSIZE=2000
