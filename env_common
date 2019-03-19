@@ -43,8 +43,10 @@ pathuniq () {
     echo "${q[*]}"
 }
 
+
+# Explicitly keep ':' on end of MANPATH to include default path.
+typeset -x MANPATH=$(pathuniq "$MANPATH"):
 typeset -x PATH=$(pathuniq "$PATH")
-typeset -x MANPATH=$(pathuniq "$MANPATH")
 typeset -x PYTHONPATH=$(pathuniq "$PYTHONPATH")
 
 typeset -x CPATH=$(pathuniq "$CPATH")
