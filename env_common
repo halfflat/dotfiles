@@ -1,13 +1,17 @@
 typeset -x LC_COLLATE=C
 
-typeset -x PATH="$HOME/bin:$HOME/pkg/bin:$HOME/.gem/ruby/2.1.0/bin:$PATH"
-typeset -x MANPATH="$HOME/man:$HOME/pkg/man:$HOME/pkg/share/man:$MANPATH"
+typeset -x PATH="$HOME/bin:$HOME/bin/stack:$HOME/pkg/bin:$HOME/pkg/x86_64/bin:$HOME/bin/local:$HOME/.gem/ruby/2.1.0/bin${PATH:+:}$PATH:/opt/cuda/bin"
+typeset -x MANPATH="$HOME/man:$HOME/pkg/man:$HOME/pkg/share/man${MANPATH:+:}$MANPATH"
+
+typeset -x CPATH="$HOME/pkg/include${CPATH:+:}$CPATH"
+typeset -x LIBRARY_PATH="$HOME/pkg/lib${LIBRARY_PATH:+:}$LIBRARY_PATH"
+typeset -x LD_LIBRARY_PATH="$HOME/pkg/lib:$HOME/pkg/lib64:$HOME/pkg/x86_64/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
 
 typeset -x TEXINPUTS=".:$HOME/share/texmf//:$HOME/pkg/share/texmf//:"
 typeset -x BSTINPUTS"=.:$HOME/share/texmf//:$HOME/pkg/share/texmf//:"
 
 typeset -x PYTHONSTARTUP="$HOME/.pythonrc"
-typeset -x PYTHONPATH="$HOME/pkg/lib/python2.7/site-packages"
+typeset -x PYTHONPATH="$HOME/pkg/lib/python3.7/site-packages:$HOME/pkg/lib/python2.7/site-packages"
 
 typeset -x HISTTIMEFORMAT='%F %H:%M:%S '
 
@@ -40,6 +44,10 @@ pathuniq () {
 }
 
 typeset -x PATH=$(pathuniq "$PATH")
-typeset -x MANPATH=$(pathuniq "$MANPATH"):
+typeset -x MANPATH=$(pathuniq "$MANPATH")
 typeset -x PYTHONPATH=$(pathuniq "$PYTHONPATH")
+
+typeset -x CPATH=$(pathuniq "$CPATH")
+typeset -x LIBRARY_PATH=$(pathuniq "$LIBRARY_PATH")
+typeset -x LD_LIBRARY_PATH=$(pathuniq "$LD_LIBRARY_PATH")
 
