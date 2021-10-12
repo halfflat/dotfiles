@@ -1,17 +1,27 @@
 typeset -x LC_COLLATE=C
 
-typeset -x PATH="$HOME/bin:$HOME/bin/stack:$HOME/pkg/bin:$HOME/pkg/x86_64/bin:$HOME/bin/local:$HOME/.gem/ruby/2.1.0/bin${PATH:+:}$PATH:/opt/cuda/bin"
-typeset -x MANPATH="$HOME/man:$HOME/pkg/man:$HOME/pkg/share/man${MANPATH:+:}$MANPATH"
+if type gcc >&/dev/null; then
+    typeset -x TARGET_TRIPLET=$(gcc -dumpmachine)
+elif type clang >&/dev/null; then
+    typeset -x TARGET_TRIPLET=$(clang -dumpmachine)
+fi
 
-typeset -x CPATH="$HOME/pkg/include${CPATH:+:}$CPATH"
-typeset -x LIBRARY_PATH="$HOME/pkg/lib${LIBRARY_PATH:+:}$LIBRARY_PATH"
-typeset -x LD_LIBRARY_PATH="$HOME/pkg/lib:$HOME/pkg/lib64:$HOME/pkg/x86_64/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+archpfx="${TARGET_TRIPLET}${TARGET_TRIPLET:+/}"
+archsfx="${TARGET_TRIPLET:+/}${TARGET_TRIPLET}"
+typeset -x XDG_BIN_HOME="$HOME/.local/${archpfx}bin"
 
-typeset -x TEXINPUTS=".:$HOME/share/texmf//:$HOME/pkg/share/texmf//:"
-typeset -x BSTINPUTS"=.:$HOME/share/texmf//:$HOME/pkg/share/texmf//:"
+typeset -x PATH="$HOME/bin:$HOME/bin${archsfx}:$HOME/pkg/bin:$HOME/pkg/${archpfx}bin:$XDG_BIN_HOME:/opt/local/bin${PATH:+:}$PATH"
+typeset -x MANPATH="$HOME/man:$HOME/pkg/man:$HOME/pkg/share/man:/opy/local/share/man${MANPATH:+:}$MANPATH"
+
+typeset -x CPATH="$HOME/pkg/include:/opt/local/include${CPATH:+:}$CPATH"
+typeset -x LIBRARY_PATH="$HOME/pkg/lib:/opt/local/lib${LIBRARY_PATH:+:}$LIBRARY_PATH"
+typeset -x LD_LIBRARY_PATH="$HOME/pkg/${archpfx}lib:/opt/local/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+
+typeset -x TEXINPUTS=".:$HOME/share/texmf//:$HOME/pkg/share/texmf//:/opt/local/share/texmf//"
+typeset -x BSTINPUTS"=.:$HOME/share/texmf//:$HOME/pkg/share/texmf//:/opt/local/share/texmf//"
 
 typeset -x PYTHONSTARTUP="$HOME/.pythonrc"
-typeset -x PYTHONPATH="$HOME/pkg/lib/python3.7/site-packages:$HOME/pkg/lib/python2.7/site-packages"
+# typeset -x PYTHONPATH="$HOME/pkg/lib/python3.7/site-packages:$HOME/pkg/lib/python2.7/site-packages"
 
 typeset -x HISTTIMEFORMAT='%F %H:%M:%S '
 
@@ -43,7 +53,6 @@ pathuniq () {
     echo "${q[*]}"
 }
 
-
 # Explicitly keep ':' on end of MANPATH to include default path.
 typeset -x MANPATH=$(pathuniq "$MANPATH"):
 typeset -x PATH=$(pathuniq "$PATH")
@@ -52,4 +61,50 @@ typeset -x PYTHONPATH=$(pathuniq "$PYTHONPATH")
 typeset -x CPATH=$(pathuniq "$CPATH")
 typeset -x LIBRARY_PATH=$(pathuniq "$LIBRARY_PATH")
 typeset -x LD_LIBRARY_PATH=$(pathuniq "$LD_LIBRARY_PATH")
+
+if [ -n "$ZSH_VERSION" ]; then
+    function = () {
+        if [[ $# -ne 0 ]]; then dirs "$@";
+        else dirs -v;
+        fi;
+    }
+    
+    function - () {
+        if [[ $# -eq 0 ]]; then
+            popd;
+        elif [[ $# -eq 1 && "$1" =~ ^[0-9]+$ ]]; then
+            repeat $1 { popd -q };
+        else
+            pushd "${@}";
+        fi;
+    }
+else
+    function = () {
+        if [[ $# -ne 0 ]]; then
+            for ((n=$#;n>0;--n)) do pushd -n "${@:$n:1}" >/dev/null; done
+        else dirs -v;
+        fi;
+    }
+    
+    function - () {
+        if [[ $# -eq 0 ]]; then
+            popd;
+        elif [[ $# -eq 1 && "$1" =~ ^[0-9]+$ ]]; then
+            for ((n=0;n<$1;++n)) do popd -q; done;
+        else
+            pushd "${@}";
+        fi;
+    }
+fi
+
+function + () {
+    if [[ $# -eq 0 ]]; then
+        pushd;
+    elif [[ $# -eq 1 && "$1" =~ ^[0-9]+$ ]]; then
+        pushd +$1;
+    else
+        pushd "${@}";
+    fi;
+}
+    
 
